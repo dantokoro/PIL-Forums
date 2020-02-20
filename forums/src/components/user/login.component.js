@@ -128,7 +128,20 @@ export default class CreateUser extends Component {
 
   onLoginSubmit(e){
     e.preventDefault();
-    
+    const newUser = {
+      username: this.state.username,
+      password: this.state.password,
+      // email: this.state.email
+    };
+    axios.post("http://localhost:8000/login", newUser).then(res => {
+      console.log(res.data);
+      alert("Login successfully");
+    });
+    this.setState({
+      username: "",
+      password: "",
+      email: ""
+    });
   }
 
   render() {

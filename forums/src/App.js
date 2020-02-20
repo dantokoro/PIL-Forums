@@ -8,6 +8,8 @@ import Navbar from "./components/navbar.component"
 // import EditExercise from "./components/edit-exercise.component";
 // import CreateExercise from "./components/create-exercise.component";
 import Login from "./components/user/login.component";
+import Profile from "./components/user/profile.component";
+
 
 function App() {
   return (
@@ -18,7 +20,7 @@ function App() {
         <Route path="/" exact component={Login} />
         {/* <Route path="/edit/:id" component={EditExercise} />
         <Route path="/create" component={CreateExercise} /> */}
-        {/* <Route path="/login" component={Login} /> */}
+        <Route path="/profile" component={Profile} />
       </div>
     </Router>
   );

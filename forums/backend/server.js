@@ -7,12 +7,17 @@ var morgan = require("morgan");
 var cookieParser = require("cookie-parser");
 // var bodyParser = require("body-parser");
 var session = require('express-session');
+
 const usersRouter = require("./routes/users");
+var authRoutes   = require('./routes/auth');
+var testRoutes   = require('./routes/test');
 
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 8000;
+
+require('./config/passport')(passport);
 
 app.use(morgan("dev")); // log tất cả request ra console log
 app.use(cookieParser()); // đọc cookie (cần cho xác thực)
@@ -30,8 +35,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-// const usersRouter = require("./routes/users.js")(app, passport); // Load routes truyền vào app và passport đã config ở trên
-// require('./routes/users.js')(app, passport);
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {
@@ -44,8 +47,9 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
 
-// app.use('/exercises', exercisesRouter);
 app.use("/users", usersRouter);
+app.use('/auth', authRoutes);
+app.use('/test', testRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
