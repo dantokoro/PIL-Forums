@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
+import "../../css/login.css";
 
-export default class CreateUser extends Component {
+export default class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -13,15 +14,26 @@ export default class CreateUser extends Component {
     this.onSignupSubmit = this.onSignupSubmit.bind(this);
     this.onLoginSubmit = this.onLoginSubmit.bind(this);
 
-
     this.state = {
       username: "",
       password: "",
-      email: ""
+      email: "",
+      redirectTo: null
     };
   }
 
   componentDidMount() {
+    axios
+      .get("http://localhost:8000/users")
+      .then(res => {
+        if (res.data.length > 0) {
+          console.log(res.data);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     function checkPasswordMatch() {
       var password = $("#new_password").val();
       var confirmPassword = $("#confirm_password").val();
@@ -126,17 +138,31 @@ export default class CreateUser extends Component {
     });
   }
 
-  onLoginSubmit(e){
+  onLoginSubmit(e) {
     e.preventDefault();
     const newUser = {
       username: this.state.username,
-      password: this.state.password,
-      // email: this.state.email
+      password: this.state.password
     };
-    axios.post("http://localhost:8000/login", newUser).then(res => {
-      console.log(res.data);
-      alert("Login successfully");
-    });
+    axios
+      .post("http://localhost:8000/auth/login", newUser, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      })
+      .then(res => {
+        console.log("login api response: ", res.data);
+        this.setState({
+          redirectTo: "auth/profile"
+        });
+      })
+      .catch(err => {
+        console.log("Error :( " + err);
+        this.setState({
+          redirectTo: "/login"
+        });
+      });
+
     this.setState({
       username: "",
       password: "",
@@ -145,6 +171,10 @@ export default class CreateUser extends Component {
   }
 
   render() {
+    if (this.state.redirectTo) {
+      console.log("redirect to " + this.state.redirectTo);
+      return <Redirect to={{ pathname: this.state.redirectTo }} />;
+    }
     return (
       <div>
         <div className="form">
@@ -179,14 +209,6 @@ export default class CreateUser extends Component {
                     name="username"
                   />
                 </div>
-
-                {/* <div className="field-wrap">
-                    <label>
-                      Last Name<span className="req">*</span>
-                    </label>
-                    <input type="text" required autoComplete="off" />
-                  </div>
-                </div> */}
 
                 <div className="field-wrap">
                   <label>

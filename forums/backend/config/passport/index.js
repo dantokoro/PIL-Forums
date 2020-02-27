@@ -1,6 +1,4 @@
-// load all the things we need
 var LocalStrategy    = require('passport-local').Strategy;
-
 var User       = require('../../models/user.model');
 
 var myLocalConfig = (passport) => {
@@ -17,21 +15,18 @@ var myLocalConfig = (passport) => {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
+        console.log("ready to deserializeUser");
         User.findById(id, function(err, user) {
+            console.log("deserializeUser: ", user);
             done(err, user);
         });
     });
-
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
-    passport.use('local-login', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField : 'username',
-            passwordField : 'password',
-            passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-        },
-        function(req, username, password, done) {
+    passport.use('local-login', new LocalStrategy(
+        function(username, password, done) {
+            console.log(username + "---" + password);
             if (username)
                 username = username.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
             // asynchronous
