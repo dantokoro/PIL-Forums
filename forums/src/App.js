@@ -9,12 +9,12 @@ import Home from "./components/home.component";
 import Login from "./components/user/login.component";
 import Profile from "./components/user/profile.component";
 
+axios.defaults.withCredentials = true;
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      loggedIn: false,
-      username: null
+      current_user: null
     };
 
     this.getUser = this.getUser.bind(this);
@@ -32,16 +32,14 @@ class App extends Component {
 
   getUser() {
     axios.get("http://localhost:8000/auth").then(response => {
-      console.log("Current user: ", response.data);
+      console.log("Current user(app): ", response.data);
       if (response.data.user) {
         this.setState({
-          loggedIn: true,
-          username: response.data.user.username
+          current_user: response.data.user.username
         });
       } else {
         this.setState({
-          loggedIn: false,
-          username: null
+          current_user: null
         });
       }
     });
@@ -51,14 +49,14 @@ class App extends Component {
     return (
       <Router>
         <div className="app">
-          <Navbar updateUser={this.updateUser} loggedIn={this.state.loggedIn} />
-          {this.state.loggedIn && <p>Join the party, {this.state.username}!</p>}
+          <Navbar updateUser={this.updateUser} current_user={this.state.current_user} />
+          {this.state.current_user && <p>Join the party, {this.state.current_user}!</p>}
           <Route exact path="/" component={Home} />
           <Route
             path="/login"
             render={() => <Login updateUser={this.updateUser} />}
           />
-          <Route path="/auth/profile" render={() => <Profile />} />
+          <Route path="/auth/profile" render={() => <Profile current_user={this.state.current_user} />} />
         </div>
       </Router>
     );

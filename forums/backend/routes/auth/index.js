@@ -33,8 +33,6 @@ router.post(
   passport.authenticate('local-login'),
   (req, res) => {
       console.log('logged in', req.user.username);
-      console.log('Session: ', req.session);
-
       res.send(req.user);
   }
 )
@@ -48,10 +46,7 @@ router.get('/', (req, res, next) => {
   }
 })
 
-router.get("/profile", (req, res) => {
-  // if (req.isAuthenticated()) console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-  // else console.log('bbbbbbbbbbbbbbbbbbbbbbbbbb');
-  console.log('Session (profile): ', req.session);
+router.get("/profile", isLoggedIn, (req, res) => {
   res.status(200).json(req.user);
 });
 
@@ -67,6 +62,7 @@ module.exports = router;
 
 //route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
+  console.log('Session (islogin): ', req.session);
   if (req.isAuthenticated()) return next();
   res.status(400).json({
     message: "access denied / not being login"

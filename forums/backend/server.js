@@ -32,17 +32,19 @@ require('./config/passport')(passport);
 
 app.use(morgan("dev")); // log tất cả request ra console log
 app.use(cookieParser('')); // đọc cookie (cần cho xác thực)
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+    origin:['http://localhost:3000'],
+    methods:['GET','POST'],
+    credentials: true // enable set cookie
+}));
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(
   session({
     secret: "piluahihi",
     resave: true, //required
-    saveUninitialized: false, 
-    cookie: { 
-        secure: true
-    }
+    saveUninitialized: true
   })
 ); // chuối bí mật đã mã hóa cookie
 app.use(passport.initialize());

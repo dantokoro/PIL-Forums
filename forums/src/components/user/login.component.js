@@ -23,16 +23,6 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:8000/users")
-      .then(res => {
-        if (res.data.length > 0) {
-          console.log(res.data);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
 
     function checkPasswordMatch() {
       var password = $("#new_password").val();
@@ -145,13 +135,12 @@ export default class Login extends Component {
       password: this.state.password
     };
     axios
-      .post("http://localhost:8000/auth/login", newUser, {
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8"
-        }
-      })
+      .post("http://localhost:8000/auth/login", newUser)
       .then(res => {
         console.log("login api response: ", res.data);
+        this.props.updateUser({
+          current_user: res.data.username
+        });
         this.setState({
           redirectTo: "auth/profile"
         });

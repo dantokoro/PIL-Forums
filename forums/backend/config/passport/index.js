@@ -15,9 +15,7 @@ var myLocalConfig = (passport) => {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        console.log("ready to deserializeUser");
         User.findById(id, function(err, user) {
-            console.log("deserializeUser: ", user);
             done(err, user);
         });
     });
