@@ -14,7 +14,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      current_user: null
+      current_user: null,
+      loading: true
     };
 
     this.getUser = this.getUser.bind(this);
@@ -35,11 +36,13 @@ class App extends Component {
       console.log("Current user(app): ", response.data);
       if (response.data.user) {
         this.setState({
-          current_user: response.data.user.username
+          current_user: response.data.user.username,
+          loading: false
         });
       } else {
         this.setState({
-          current_user: null
+          current_user: null,
+          loading: false
         });
       }
     });
@@ -48,6 +51,7 @@ class App extends Component {
   render() {
     return (
       <Router>
+      {!this.state.loading ? 
         <div className="app">
           <Navbar updateUser={this.updateUser} current_user={this.state.current_user} />
           {this.state.current_user && <p>Join the party, {this.state.current_user}!</p>}
@@ -58,23 +62,11 @@ class App extends Component {
           />
           <Route path="/auth/profile" render={() => <Profile current_user={this.state.current_user} />} />
         </div>
+      : <></>}
       </Router>
     );
   }
 }
-// function App() {
-//   return (
-//     <Router>
-//       <div className="container">
-//         <Navbar />
-//         <br/>
-//         <Route path="/" exact component={Login} />
-//         {/* <Route path="/edit/:id" component={EditExercise} />
-//         <Route path="/create" component={CreateExercise} /> */}
-//         <Route path="/auth/profile" component={Profile} />
-//       </div>
-//     </Router>
-//   );
-// }
+
 
 export default App;

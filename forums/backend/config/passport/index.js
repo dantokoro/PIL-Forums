@@ -62,8 +62,6 @@ var myLocalConfig = (passport) => {
             if (username)
                 username = username.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
             var email = req.body.email;
-            var avatar_url = req.body.avatar_url;
-            var star = req.body.star;
 
             // asynchronous
             process.nextTick(function() {
@@ -84,8 +82,6 @@ var myLocalConfig = (passport) => {
                             newUser.email    = email;
                             newUser.password = newUser.generateHash(password);
                             newUser.username    = username;
-                            newUser.avatar_url    = avatar_url;
-                            newUser.star    = star;
 
                             newUser.save(function(err) {
                                 if (err)
@@ -112,8 +108,6 @@ var myLocalConfig = (passport) => {
                             user.username = username;
                             user.password = user.generateHash(password);
                             newUser.email    = email;
-                            newUser.avatar_url    = avatar_url;
-                            newUser.star    = star;
                             user.save(function (err) {
                                 if (err)
                                     return done(err);

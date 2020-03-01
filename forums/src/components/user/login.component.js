@@ -116,10 +116,14 @@ export default class Login extends Component {
       password: this.state.password,
       email: this.state.email
     };
-    axios.post("http://localhost:8000/users/add", newUser).then(res => {
+    axios.post("http://localhost:8000/auth/signup", newUser).then(res => {
       console.log(res.data);
-      alert("Register successfully");
-      window.location.reload();
+      this.props.updateUser({
+        current_user: res.data.username
+      });
+      this.setState({
+        redirectTo: "auth/profile"
+      });
     });
     this.setState({
       username: "",
@@ -196,6 +200,7 @@ export default class Login extends Component {
                     value={this.state.username}
                     onChange={this.onChangeUsername}
                     name="username"
+                    minlength="3"
                   />
                 </div>
 

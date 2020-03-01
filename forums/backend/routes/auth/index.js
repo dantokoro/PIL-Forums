@@ -10,19 +10,6 @@ router.post(
   })
 );
 
-// router.post(
-//   "/login",
-//   function(req, res, next) {
-//     console.log("routes/user.js, login, req.body: ");
-//     console.log(req.body);
-//     next();
-//   },
-//   passport.authenticate("local-login", {
-//     successRedirect: "/auth/profile",
-//     failureRedirect: "/"
-//   })
-// );
-
 router.post(
   '/login',
   function (req, res, next) {
@@ -38,7 +25,6 @@ router.post(
 )
 
 router.get('/', (req, res, next) => {
-  console.log("Current user: " + req.user);
   if (req.user) {
       res.json({ user: req.user })
   } else {
