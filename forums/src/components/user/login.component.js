@@ -151,9 +151,7 @@ export default class Login extends Component {
       })
       .catch(err => {
         console.log("Error :( " + err);
-        this.setState({
-          redirectTo: "/login"
-        });
+        window.location.reload(false);
       });
 
     this.setState({
@@ -172,12 +170,12 @@ export default class Login extends Component {
       <div>
         <div className="form">
           <ul className="tab-group">
-            <li className="tab active">
+            <li className="tab">
               <h2 name="#signup">
                 <Link to="">Sign Up</Link>
               </h2>
             </li>
-            <li className="tab">
+            <li className="tab active">
               <h2 name="#login">
                 <Link to="">Log In</Link>
               </h2>
@@ -185,11 +183,53 @@ export default class Login extends Component {
           </ul>
 
           <div className="tab-content">
+            <div id="login">
+              <h1>Welcome Back!</h1>
+
+              <form onSubmit={this.onLoginSubmit}>
+                <div className="field-wrap">
+                  <label>
+                    Username<span className="req">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={this.state.username}
+                    onChange={this.onChangeUsername}
+                    name="username"
+                  />
+                </div>
+
+                <div className="field-wrap">
+                  <label>
+                    Password<span className="req">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    onChange={this.onChangePassword}
+                    name="password"
+                  />
+                </div>
+
+                <p className="forgot">
+                  <Link to="/">Forgot Password?</Link>
+                </p>
+
+                <button
+                  id="login-button"
+                  type="submit"
+                  className="button button-block"
+                >
+                  Login
+                </button>
+              </form>
+            </div>
+
             <div id="signup">
               <h1>Sign Up for Free</h1>
 
               <form onSubmit={this.onSignupSubmit}>
-                {/* <div className="top-row"> */}
                 <div className="field-wrap">
                   <label>
                     Username<span className="req">*</span>
@@ -249,49 +289,6 @@ export default class Login extends Component {
                   className="button button-block"
                 >
                   Get Started
-                </button>
-              </form>
-            </div>
-
-            <div id="login">
-              <h1>Welcome Back!</h1>
-
-              <form onSubmit={this.onLoginSubmit}>
-                <div className="field-wrap">
-                  <label>
-                    Username<span className="req">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={this.state.username}
-                    onChange={this.onChangeUsername}
-                    name="username"
-                  />
-                </div>
-
-                <div className="field-wrap">
-                  <label>
-                    Password<span className="req">*</span>
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    onChange={this.onChangePassword}
-                    name="password"
-                  />
-                </div>
-
-                <p className="forgot">
-                  <Link to="/">Forgot Password?</Link>
-                </p>
-
-                <button
-                  id="login-button"
-                  type="submit"
-                  className="button button-block"
-                >
-                  Login
                 </button>
               </form>
             </div>

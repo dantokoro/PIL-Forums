@@ -154,6 +154,14 @@
     margin-top: -20px;
     text-align: right;
   }
+
+  .forgot a{
+    color: #009999;
+  }
+
+  .forgot a:hover{
+    color: #00b454;
+  }
   
   #confirm-password-error-message {
     color: #1ab188;
