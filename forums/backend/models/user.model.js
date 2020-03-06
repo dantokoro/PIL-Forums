@@ -13,7 +13,7 @@ const userSchema = new Schema({
   },
   password: {
       type: String,
-      required: true,
+      // required: true,
       minlength: 6
   },
   avatar_url: {
@@ -29,6 +29,10 @@ const userSchema = new Schema({
   admin: {
       type: Boolean,
       default: false
+  },
+  google_id: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: true,

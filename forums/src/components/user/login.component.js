@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
+import FacebookLogin from "react-facebook-login";
 import axios from "axios";
 import $ from "jquery";
 import "../../css/login.css";
@@ -14,6 +15,9 @@ export default class Login extends Component {
     this.onSignupSubmit = this.onSignupSubmit.bind(this);
     this.onLoginSubmit = this.onLoginSubmit.bind(this);
 
+    // this.componentClicked = this.componentClicked.bind(this);
+    // this.responseFacebook = this.responseFacebook.bind(this);
+
     this.state = {
       username: "",
       password: "",
@@ -23,7 +27,6 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-
     function checkPasswordMatch() {
       var password = $("#new_password").val();
       var confirmPassword = $("#confirm_password").val();
@@ -161,6 +164,16 @@ export default class Login extends Component {
     });
   }
 
+  responseFacebook = response => {
+    console.log(response);
+  };
+
+  // componentClicked = () => {
+  //   this.setState({
+  //     redirectTo: "http://localhost:8000/auth/facebook"
+  //   });
+  // };
+
   render() {
     if (this.state.redirectTo) {
       console.log("redirect to " + this.state.redirectTo);
@@ -212,6 +225,28 @@ export default class Login extends Component {
                   />
                 </div>
 
+                {/* <FacebookLogin
+                  appId="1665785526894252"
+                  // autoLoad={true}
+                  fields="name,email,picture"
+                  onClick={this.componentClicked}
+                  callback={this.responseFacebook} 
+                  /> */}
+                <a href="http://localhost:8000/auth/facebook">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Facebook_icon_2013.svg/300px-Facebook_icon_2013.svg.png"
+                    alt="login by facebook"
+                    width="8%"
+                  />
+                </a>
+                <a href="http://localhost:8000/auth/google">
+                  <img
+                    src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png"
+                    alt="login by google"
+                    width="8%"
+                  />
+                </a> 
+
                 <p className="forgot">
                   <Link to="/">Forgot Password?</Link>
                 </p>
@@ -240,7 +275,7 @@ export default class Login extends Component {
                     value={this.state.username}
                     onChange={this.onChangeUsername}
                     name="username"
-                    minlength="3"
+                    minLength="3"
                   />
                 </div>
 

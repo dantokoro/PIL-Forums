@@ -7,6 +7,8 @@ var morgan = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
 
 const usersRouter = require("./routes/users");
 var authRoutes   = require('./routes/auth');
@@ -35,7 +37,8 @@ app.use(cookieParser('')); // đọc cookie (cần cho xác thực)
 // app.use(cors());
 app.use(cors({
     origin:['http://localhost:3000'],
-    methods:['GET','POST'],
+    methods:'GET,HEAD,PUT,PATCH,POST,DELETE',
+    store: new MongoStore({ mongooseConnection: connection }),
     credentials: true // enable set cookie
 }));
 app.use(bodyParser.json()); // support json encoded bodies

@@ -1,4 +1,6 @@
 var LocalStrategy    = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User       = require('../../models/user.model');
 
 var myLocalConfig = (passport) => {
@@ -124,6 +126,59 @@ var myLocalConfig = (passport) => {
             });
 
         }));
+
+        // passport.use(new FacebookStrategy({
+        //     clientID: "1665785526894252",
+        //     clientSecret: "c9c8c06d02ff1c7cff1062f074fa2ee9",
+        //     callbackURL: "http://127.0.0.1:8000/auth/facebook/callback"
+        //   },
+        //   function(accessToken, refreshToken, profile, done) {
+        //       console.log("Profile in strategy: ", profile);
+        //     User.findOrCreate({username: profile.displayName}, {username: profile.displayName,facebook_id: profile.id}, function(err, user) {
+        //         console.log("in fb strategy...");
+        //         if (err) { return done(err); }
+        //       done(null, user);
+        //     });
+        //   }
+        // ));
+
+        passport.use(new GoogleStrategy({
+            clientID: "969479872337-i5lfj0mi6h1df63p1p3e97o77cn1hd7q.apps.googleusercontent.com",
+            clientSecret: "pKSTQyWevZ25rvfZYxy4AYj3",
+            callbackURL: "http://127.0.0.1:8000/auth/google/callback"
+          },
+          function(accessToken, refreshToken, profile, done) {
+            //   console.log("Google profile: ", profile);
+            //    User.findOrCreate({ google_id: profile.id }, { username: profile.displayName,google_id: profile.id }, function (err, user) {
+            //      return done(err, user);
+            //    });
+            User.findOne({
+                'google_id': profile.id 
+            }, function(err, user) {
+                if (err) {
+                    return done(err);
+                }
+                //No user was found... so create a new user with values from Facebook (all the profile. stuff)
+                if (!user) {
+                    user = new User({
+                        google_id: profile.id,
+                        username: profile.displayName,
+                        email: profile.emails[0].value,
+                        avatar_url: profile.photos.value
+                    });
+                    user.save(function(err) {
+                        if (err) console.log(err);
+                        return done(err, user);
+                    });
+                } else {
+                    //found user. Return
+                    return done(err, user);
+                }
+            });
+          }
+        ));
+        
+        
 };
 
 module.exports = myLocalConfig;

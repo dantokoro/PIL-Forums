@@ -4,11 +4,15 @@ import "../../css/profile.css";
 import axios from 'axios'
 
 export default class Profile extends Component {
-
+  componentDidMount(){
+    axios.get("http://localhost:8000/auth/profile").then(response => {
+      console.log("Current user(profile): ", response.data);
+    });
+  }
   render() {
-    const current_user = this.props.current_user;
-    console.log("current_user(profile): " + current_user);
-    if(!current_user) return <Redirect to={{ pathname: '/login' }} />;
+    // const current_user = this.props.current_user;
+    // console.log("current_user(profile): " + current_user);
+    // if(!current_user) return <Redirect to={{ pathname: '/login' }} />;
     return (
       <div>
         <div className="wrapper">
